@@ -1,64 +1,49 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Carregar os dados do arquivo CSV
 url = "https://raw.githubusercontent.com/wcota/covid19br/master/cases-brazil-cities.csv"
 dados = pd.read_csv(url)
 
-# Excluir linhas com dados agregados ("TOTAL")
 dados = dados[dados["city"] != "TOTAL"]
 
-# Agrupar os dados por estado
 dados_estado = dados.groupby("state").sum()
 
-# 1. Cidade com mais casos de covid
 cidade_mais_casos = dados.loc[dados["totalCases"].idxmax()]
 print("Cidade com mais casos de covid:", cidade_mais_casos["city"], "-", cidade_mais_casos["totalCases"], "casos")
 
-# 2. Cidade com menos casos de covid
 cidade_menos_casos = dados.loc[dados["totalCases"].idxmin()]
 print("Cidade com menos casos de covid:", cidade_menos_casos["city"], "-", cidade_menos_casos["totalCases"], "casos")
 
-# 3. Estado com mais casos de covid
 estado_mais_casos = dados_estado["totalCases"].idxmax()
 print("Estado com mais casos de covid:", estado_mais_casos, "-", dados_estado.loc[estado_mais_casos, "totalCases"], "casos")
 
-# 4. Estado com menos casos de covid
 estado_menos_casos = dados_estado["totalCases"].idxmin()
 print("Estado com menos casos de covid:", estado_menos_casos, "-", dados_estado.loc[estado_menos_casos, "totalCases"], "casos")
 
-# 5. Cidade com mais mortes por covid
 cidade_mais_mortes = dados.loc[dados["deaths"].idxmax()]
 print("Cidade com mais mortes por covid:", cidade_mais_mortes["city"], "-", cidade_mais_mortes["deaths"], "mortes")
 
-# 6. Cidade com menos mortes por covid
 cidade_menos_mortes = dados.loc[dados["deaths"].idxmin()]
 print("Cidade com menos mortes por covid:", cidade_menos_mortes["city"], "-", cidade_menos_mortes["deaths"], "mortes")
 
-# 7. Estado com mais mortes por covid
 estado_mais_mortes = dados_estado["deaths"].idxmax()
 print("Estado com mais mortes por covid:", estado_mais_mortes, "-", dados_estado.loc[estado_mais_mortes, "deaths"], "mortes")
 
-# 8. Estado com menos mortes por covid
 estado_menos_mortes = dados_estado["deaths"].idxmin()
 print("Estado com menos mortes por covid:", estado_menos_mortes, "-", dados_estado.loc[estado_menos_mortes, "deaths"], "mortes")
 
-# 9. Total de casos de covid no Brasil
 total_casos_brasil = dados["totalCases"].sum()
 print("Total de casos de covid no Brasil:", total_casos_brasil)
 
-# 10. Total de mortes por covid no Brasil
 total_mortes_brasil = dados["deaths"].sum()
 print("Total de mortes por covid no Brasil:", total_mortes_brasil)
 
-# 11. Gráfico barplot com 5 estados com mais mortes
 top5_estados_mortes = dados_estado["deaths"].nlargest(5)
 top5_estados_mortes.plot(kind="bar", color="red", title="Top 5 estados com mais mortes por covid")
 plt.ylabel("Número de Mortes")
 plt.xlabel("Estado")
 plt.show()
 
-# 12. Gráfico histograma com 5 estados com menos mortes
 bottom5_estados_mortes = dados_estado["deaths"].nsmallest(5)
 bottom5_estados_mortes.plot(kind="bar", color="blue", title="Top 5 estados com menos mortes por covid")
 plt.ylabel("Número de Mortes")
